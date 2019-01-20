@@ -13,11 +13,20 @@ defmodule SudokuSolver do
     {options, str}
   end
 
-  defp load({[], str}) do
-    IO.puts "load from #{str}"
+  defp load({[], [str | _]}) do
+    {:ok, pid} = StringIO.open(str)
+    load_stream(pid, "")
   end
 
   defp load({options, _}) do
-    IO.puts "load #{options[:name]} from #{options[:file]}"
+    case File.open(options[:file], [:read]) do
+      {:ok, pid} -> load_stream(pid, options[:name])
+      {:error, reason} -> IO.puts "Could not open `#{options[:file]}`: #{reason}"
+    end
+  end
+
+  defp load_stream(pid, name) do
+    IO.write "load_stream `#{name}` from "
+    IO.inspect pid 
   end
 end
