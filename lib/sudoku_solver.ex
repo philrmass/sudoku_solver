@@ -1,22 +1,23 @@
 defmodule SudokuSolver do
-  @moduledoc """
-  Documentation for SudokuSolver.
-  """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> SudokuSolver.hello()
-      :world
-
-  """
-  def hello do
-    :world
+  def main(args) do
+    args |> parse_args |> load 
   end
 
-  def main(_args) do
-    IO.puts "Hello world"
+  defp parse_args(args) do
+    {options, str, _} = OptionParser.parse(args,
+      strict: [
+        file: :string,
+        name: :string
+      ]
+    )
+    {options, str}
+  end
+
+  defp load({[], str}) do
+    IO.puts "load from #{str}"
+  end
+
+  defp load({options, _}) do
+    IO.puts "load #{options[:name]} from #{options[:file]}"
   end
 end
