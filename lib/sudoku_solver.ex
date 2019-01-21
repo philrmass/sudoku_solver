@@ -14,19 +14,35 @@ defmodule SudokuSolver do
   end
 
   defp load({[], [str | _]}) do
-    {:ok, pid} = StringIO.open(str)
-    load_stream(pid, "")
+    {:ok, pid} = StringIO.open(String.replace(str, "\\n", "\n"))
+    load_puzzle("", IO.binstream(pid, :line))
   end
 
   defp load({options, _}) do
-    case File.open(options[:file], [:read]) do
-      {:ok, pid} -> load_stream(pid, options[:name])
-      {:error, reason} -> IO.puts "Could not open `#{options[:file]}`: #{reason}"
-    end
+    load_puzzle(options[:name], File.stream!(options[:file]))
   end
 
-  defp load_stream(pid, name) do
-    IO.write "load_stream `#{name}` from "
-    IO.inspect pid 
+  defp load_puzzle("", stream) do
+    IO.puts "load_puzzle NO_NAME"
+    name = Enum.take(stream, 1)
+    #IO.puts "name=#{name}"
+    #IO.puts "next=#{Enum.take(stream, 2)}"
+    #IO.puts "next=#{Enum.take(stream, 2)}"
+    stream |> load_puzzle_line() |> load_puzzle_line
+  end
+
+  defp load_puzzle(name, stream) do
+    IO.puts "load_puzzle #{name}"
+    nam = Enum.take(stream, 1)
+    IO.puts "nam=#{nam}"
+    #IO.puts "next=#{Enum.take(stream, 2)}"
+    #IO.puts "next=#{Enum.take(stream, 2)}"
+    #load_puzzle_line(name, stream, [])
+    stream |> load_puzzle_line() |> load_puzzle_line
+  end
+
+  defp load_puzzle_line(stream) do
+    IO.puts Enum.take(stream, 1)
+    stream
   end
 end
