@@ -36,5 +36,9 @@ defmodule SudokuSolver do
     IO.puts name
     IO.puts length(lines)
     IO.inspect lines 
+    # all = Enum.join(lines, "")
+    # alln = String.split(all, "", trim: true)
+    # ns = map String.to_integer(all1)
+    # {:ok, name, List.to_tuple(alln)}
   end
 end
