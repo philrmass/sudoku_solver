@@ -14,35 +14,27 @@ defmodule SudokuSolver do
   end
 
   defp load({[], [str | _]}) do
-    {:ok, pid} = StringIO.open(String.replace(str, "\\n", "\n"))
-    load_puzzle("", IO.binstream(pid, :line))
+    load_lines("", String.split(str, "\\n"))
   end
 
   defp load({options, _}) do
-    load_puzzle(options[:name], File.stream!(options[:file]))
+    lines = File.read!(options[:file]) |> String.split("\n")
+    load_lines(options[:name], lines)
   end
 
-  defp load_puzzle("", stream) do
-    IO.puts "load_puzzle NO_NAME"
-    name = Enum.take(stream, 1)
-    #IO.puts "name=#{name}"
-    #IO.puts "next=#{Enum.take(stream, 2)}"
-    #IO.puts "next=#{Enum.take(stream, 2)}"
-    stream |> load_puzzle_line() |> load_puzzle_line
+  defp load_lines("", lines) do
+    [name | lines] = lines
+    load_puzzle(name, Enum.take(lines, 9))
   end
 
-  defp load_puzzle(name, stream) do
-    IO.puts "load_puzzle #{name}"
-    nam = Enum.take(stream, 1)
-    IO.puts "nam=#{nam}"
-    #IO.puts "next=#{Enum.take(stream, 2)}"
-    #IO.puts "next=#{Enum.take(stream, 2)}"
-    #load_puzzle_line(name, stream, [])
-    stream |> load_puzzle_line() |> load_puzzle_line
+  defp load_lines(name, lines) do
+    index = Enum.find_index(lines, fn x -> x == name end)
+    load_puzzle(name, Enum.slice(lines, index + 1, 9))
   end
 
-  defp load_puzzle_line(stream) do
-    IO.puts Enum.take(stream, 1)
-    stream
+  defp load_puzzle(name, lines) do
+    IO.puts name
+    IO.puts length(lines)
+    IO.inspect lines 
   end
 end
