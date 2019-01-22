@@ -1,6 +1,7 @@
 defmodule SudokuSolver do
   def main(args) do
-    args |> parse_args |> load 
+    puzzle = args |> parse_args |> load 
+    IO.inspect puzzle
   end
 
   defp parse_args(args) do
@@ -33,12 +34,15 @@ defmodule SudokuSolver do
   end
 
   defp load_puzzle(name, lines) do
-    IO.puts name
-    IO.puts length(lines)
-    IO.inspect lines 
-    # all = Enum.join(lines, "")
-    # alln = String.split(all, "", trim: true)
-    # ns = map String.to_integer(all1)
-    # {:ok, name, List.to_tuple(alln)}
+    values = load_puzzle_values(lines);
+    status = if length(values) == 81, do: :ok, else: :error
+    {status, name, List.to_tuple(values)}
+  end
+
+  def load_puzzle_values(lines) do
+    lines
+    |> Enum.join("")
+    |> String.split("", trim: true)
+    |> Enum.map(fn x -> String.to_integer(x) end);
   end
 end
