@@ -1,12 +1,3 @@
-# change possibles to MapSet
-# puzzle_string :: string
-# possibles_string :: string
-# add first tests, run them
-# same_row(index0, index1) :: boolean
-# same_column(index0, index1) :: boolean
-# same_box(index0, index1) :: boolean
-# same_group(index0, index1) :: boolean
-# group_impossibles(index0, index1) :: MapSet
 defmodule SudokuSolver do
   def main(args) do
     {:ok, name, puzzle} = args |> parse_args |> load 
